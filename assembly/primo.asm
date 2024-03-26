@@ -1,27 +1,26 @@
+%include "io.inc"
+
 section .text
 global main
 
-main:            
-    mov rbp, rsp; for correct debugging
-    ; Prologue: Salvando os registradores que precisamos
-    mov rbx, 6 ; número que é primo
-    mov rax, 0 ; resultado da divisão
-    mov rsi, rbx ; número a que dividide
-    mov rcx, 0 ; contador
-
-    l1:
-        mov rax, rsi
-        xor rdx, rdx
-        div rbx
-
-        CMP rdx, 0
-        JE l3
-        JNE l4      
-        
-    l3:
-        INC rcx
-        
-  
-        
-    l2:
-        ret
+main:
+    mov eax, 25
+    call prime
+    xor eax, eax
+    ret
+    
+prime:
+    cmp eax, 2
+    je isprime
+    mov edx, 0
+    mov ebx, 2
+    idiv ebx
+    cmp edx, 0
+    je isnotprime
+    jg isprime
+    
+isprime:
+    PRINT_STRING 'Is prime'
+    
+isnotprime:
+    PRINT_STRING 'Not prime'
