@@ -2,128 +2,142 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Definição da estrutura Produto
-struct Produto {
-    char nome[30]; /* Nome do produto */
-    int codigo; /* Codigo do produto */
-    double preco; /* Preco do produto */
+struct Produto
+{
+    char nome[30];
+    int codigo;
+    double preco;
 };
 
-// Definição da estrutura Node
-typedef struct node {
+typedef struct node
+{
     struct Produto produto;
-    struct node* next;
+    struct node *next;
 } Node;
 
-// Função para criar um novo nó
-Node* criarNo(struct Produto produto) {
-    Node* novoNo = (Node*)malloc(sizeof(Node));
+Node *criarNo(struct Produto produto)
+{
+    Node *novoNo = (Node *)malloc(sizeof(Node));
     novoNo->produto = produto;
     novoNo->next = NULL;
     return novoNo;
 }
 
-// Função para adicionar um produto à lista
-void adicionarProduto(Node** head) {
+void add(Node **list)
+{
     struct Produto novoProduto;
-    printf("Digite o nome do produto: ");
+    printf("\nDigite o nome do produto (sem espaços): ");
     scanf("%s", novoProduto.nome);
     printf("Digite o codigo do produto: ");
     scanf("%d", &novoProduto.codigo);
-    printf("Digite o preco do produto: ");
+    printf("Digite o preço do produto: ");
     scanf("%lf", &novoProduto.preco);
 
-    Node* novoNo = criarNo(novoProduto);
+    Node *novoNo = criarNo(novoProduto);
 
-    if (*head == NULL) {
-        *head = novoNo;
-    } else {
-        Node* temp = *head;
-        while (temp->next != NULL) {
+    if (*list == NULL)
+    {
+        *list = novoNo;
+    }
+    else
+    {
+        Node *temp = *list;
+        while (temp->next != NULL)
+        {
             temp = temp->next;
         }
         temp->next = novoNo;
     }
 
-    printf("Produto adicionado com sucesso!\n");
+    printf("\nProduto adicionado com sucesso!\n");
 }
 
-// Função para exibir todos os produtos da lista
-void exibirProdutos(Node* head) {
-    if (head == NULL) {
-        printf("Nenhum produto na lista.\n");
+void show(Node *list)
+{
+    if (list == NULL)
+    {
+        printf("\nNenhum produto na lista.\n");
         return;
     }
 
-    Node* temp = head;
-    while (temp != NULL) {
+    Node *temp = list;
+    printf("\n");
+    while (temp != NULL)
+    {
         printf("Nome: %s, Codigo: %d, Preco: %.2f\n", temp->produto.nome, temp->produto.codigo, temp->produto.preco);
         temp = temp->next;
     }
 }
 
-// Função para buscar um produto pelo nome
-void buscarProdutoPorNome(Node* head) {
-    if (head == NULL) {
-        printf("Nenhum produto na lista.\n");
+void search(Node *list)
+{
+    if (list == NULL)
+    {
+        printf("\nNenhum produto na lista.\n");
         return;
     }
 
     char nome[30];
-    printf("Digite o nome do produto a ser buscado: ");
+    printf("\nDigite o nome do produto a ser buscado: ");
     scanf("%s", nome);
 
-    Node* temp = head;
-    while (temp != NULL) {
-        if (strcmp(temp->produto.nome, nome) == 0) {
-            printf("Produto encontrado: Nome: %s, Codigo: %d, Preco: %.2f\n", temp->produto.nome, temp->produto.codigo, temp->produto.preco);
+    Node *temp = list;
+    while (temp != NULL)
+    {
+        if (strcmp(temp->produto.nome, nome) == 0)
+        {
+            printf("Produto encontrado: Nome: %s, Código: %d, Preco: %.2f\n", temp->produto.nome, temp->produto.codigo, temp->produto.preco);
             return;
         }
         temp = temp->next;
     }
 
-    printf("Produto nao encontrado.\n");
+    printf("\nProduto nao encontrado.\n");
 }
 
-// Função para liberar toda a memória alocada para a lista
-void liberarLista(Node* head) {
-    Node* temp;
-    while (head != NULL) {
-        temp = head;
-        head = head->next;
+void freeList(Node *list)
+{
+    Node *temp;
+    while (list != NULL)
+    {
+        temp = list;
+        list = list->next;
         free(temp);
     }
 }
 
-int main() {
-    Node* head = NULL;
+int main()
+{
+    Node *list = NULL;
     int opcao;
 
-    do {
+    do
+    {
         printf("\nMenu:\n");
         printf("1. Adicionar produto\n");
         printf("2. Exibir todos os produtos\n");
         printf("3. Buscar produto por nome\n");
         printf("4. Sair\n");
-        printf("Escolha uma opcao: ");
+        printf("Escolha uma opção: ");
         scanf("%d", &opcao);
 
-        switch (opcao) {
-            case 1:
-                adicionarProduto(&head);
-                break;
-            case 2:
-                exibirProdutos(head);
-                break;
-            case 3:
-                buscarProdutoPorNome(head);
-                break;
-            case 4:
-                liberarLista(head);
-                printf("Saindo...\n");
-                break;
-            default:
-                printf("Opcao invalida. Tente novamente.\n");
+        switch (opcao)
+        {
+        case 1:
+            add(&list);
+            break;
+        case 2:
+            show(list);
+            break;
+        case 3:
+            search(list);
+            break;
+        case 4:
+            freeList(list);
+            printf("Saindo...\n");
+            break;
+        default:
+            printf("Opção inválida. Tente novamente.\n");
         }
     } while (opcao != 4);
 
